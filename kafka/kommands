@@ -1,10 +1,12 @@
 # ein paar aliase für die kafka CLI
 
 alias ke="docker exec -it kafka bash"
+alias ze="docker exec -it zookeeper bash"
 alias kc="docker exec -it kafka kafka-console-consumer.sh --bootstrap-server kafka_container1:9092"
 alias kp="docker exec -it kafka kafka-console-producer.sh --broker-list kafka_container1:9092"
 alias kt="docker exec -it kafka kafka-topics.sh --zookeeper zookeeper"
 alias kg="docker exec -it kafka kafka-consumer-groups.sh --bootstrap-server kafka_container1:9092"
+alias dl="docker container ls"
 
 # kafkacat -b kafka1:9093 -t syslog -C &
 # tail -n 300 -f /var/log/syslog | kafkacat -b kafka1:9093 -t syslog &

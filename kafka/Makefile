@@ -1,7 +1,6 @@
 
 it:	clean network zookeeper kafka
 volumes:	kafka-vol zookeeper-vols
-	docker volume ls
 
 clean:
 	-docker rm -f zookeeper
@@ -17,6 +16,7 @@ zookeeper:
 		--publish 2181:2181 \
 		--publish 2888:2888 \
 		--publish 3888:3888 \
+		--env ZOO_SERVERS="server.1=kafka_container_1:9092 server.2=kafka_container_2:9092" \
 		-v /home/lutz/zookeeper:/conf \
 		-v zoo-data:/data \
 		-v zoo-datalog:/datalog \
@@ -27,9 +27,12 @@ kafka:
 	docker run -d \
 		--name kafka \
 		--network kafka-net \
-		--network-alias kafka_container1 \
+		--network-alias kafka \
+		--env HOSTNAME_COMMAND="docker info 2>/dev/null | grep ^Name: | cut -d' ' -f 2" \
+		--env BROKER_IDCOMMAND=$$(hostname | cut -c 6-) \
 		--env KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181 \
 		--env KAFKA_LISTENERS=INTERNAL://:9092,EXTERNAL://:9093 \
+		--env advertised.listeners=INTERNAL://kafka:9092,EXTERNAL://$HOSTNAME:9093 \
 		--publish 9093:9093 \
 		-v /home/lutz/kafka/logs:/tmp/kafka-logs \
 		-v /home/lutz/kafka/config:/opt/kafka/config \
