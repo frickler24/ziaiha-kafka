@@ -119,6 +119,4 @@ if ! shopt -oq posix; then
 fi
 
 alias a=alias
-a ez="docker exec -it zookeeper bash"
-a ek="docker exec -it kafka bash"
-
+ssh-add ~/.ssh/github_rsa >/dev/null 2>&1
