@@ -1,0 +1,18 @@
+# ein paar aliase für die kafka CLI
+
+alias ke="docker exec -it kafka bash"
+alias kc="docker exec -it kafka kafka-console-consumer.sh --bootstrap-server kafka_container1:9092"
+alias kp="docker exec -it kafka kafka-console-producer.sh --broker-list kafka_container1:9092"
+alias kt="docker exec -it kafka kafka-topics.sh --zookeeper zookeeper"
+alias kg="docker exec -it kafka kafka-consumer-groups.sh --bootstrap-server kafka_container1:9092"
+
+# kafkacat -b kafka1:9093 -t syslog -C &
+# tail -n 300 -f /var/log/syslog | kafkacat -b kafka1:9093 -t syslog &
+
+#  cat softirqs | kafkacat -b kafka1:9093 -t irqs -P
+#  for in in {0..99}; do cat softirqs | kafkacat -b kafka1:9093 -t irqs -P; sleep 1; done
+#  (for in in {0..9999}; do cat /proc/loadavg ; date; done) | kafkacat -b kafka1:9093 -t irqs -P
+#  time (for in in {0..9999}; do cat /proc/loadavg ; date; done) | cat > /dev/null
+#  time (for in in {0..9999}; do cat /proc/loadavg ; date; done) | kafkacat -b kafka1:9093 -t irqs -P
+#  kafkacat -b kafka1:9093 -L
+

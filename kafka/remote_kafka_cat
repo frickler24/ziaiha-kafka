@@ -1,0 +1,8 @@
+#!/bin/bash
+
+docker run 	--interactive \
+           	--network kafka-net \
+           	confluentinc/cp-kafkacat \
+            	kafkacat -b kafka_container1:9092 \
+			-z snappy -P -t ${1:-"test"}
+
