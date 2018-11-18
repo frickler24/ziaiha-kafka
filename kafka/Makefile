@@ -37,6 +37,8 @@ zookeeper_versuch1:
 kafka:
 	docker run -d \
 		--name kafka \
+		--network kafka-net \
+		--network-alias kafka-10$$(hostname | cut -c 6-) \
 		--env HOSTNAME_COMMAND="docker info 2>/dev/null | grep ^Name: | cut -d' ' -f 2" \
 		--env KAFKA_BROKER_ID=10$$(hostname | cut -c 6-) \
 		--env KAFKA_ZOOKEEPER_CONNECT=$$(hostname):2181 \
