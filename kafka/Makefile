@@ -1,16 +1,25 @@
 
 it:	clean network zookeeper kafka
 volumes:	kafka-vol zookeeper-vols
-all:	volumes it
-x:	clean network volumes zookeeper
+all:	volumes it webui
 
 clean:
 	-docker rm -f zookeeper
 	-docker rm -f kafka
+	-docker stack rm zk
 	-docker network rm kafka-net
 
-
+# https://stackoverflow.com/questions/42062598/how-to-setup-zookeeper-cluster-on-docker-swarm
+# Nach Löschen des alten Swarm-Netzwerks geht das.
 zookeeper:
+	 docker stack deploy -c ../zookeeper/zoo3mal.yml zk
+
+zookeeper2:
+	 docker stack deploy -c ../zookeeper/zoo2mal.yml zk
+
+
+# Klappt nicht in einer Docker-Umgebung in einer Oracle VirtauaLBox VM (scheint generelles Problem zu sein)
+zookeeper_versuch1:
 	docker run -d \
 		--name zookeeper \
 		--network kafka-net \
@@ -56,7 +65,8 @@ network:
 	-docker network create --driver overlay zoonet
 
 
-zoochen:
+# Das hat wahrscheinlich nur nicht geklappt, weil ich das falsche Netzwerk über den Swarm gepannt habe (Port-Konflikte)
+zookeeper_versuch2:
 	-docker rm -f $$(docker ps -aq)
 	-docker volume rm $$(docker volume ls -q | grep "\-data")
 	-docker service rm $$(docker service ls -q)
@@ -73,4 +83,11 @@ zoochen:
 			--mount type=volume,source=z$$i-datalog,dst=/datalog \
 			zookeeper ; \
 	done
+
+webui:
+	docker run -d \
+		-p 80:8080 \
+		-e ZK_DEFAULT_NODE=localhost:2181/ \
+		--name zk-web \
+		-t tobilg/zookeeper-webui
 
