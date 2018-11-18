@@ -37,6 +37,21 @@ zookeeper_versuch1:
 kafka:
 	docker run -d \
 		--name kafka \
+		--env HOSTNAME_COMMAND="docker info 2>/dev/null | grep ^Name: | cut -d' ' -f 2" \
+		--env KAFKA_BROKER_ID=10$$(hostname | cut -c 6-) \
+		--env KAFKA_ZOOKEEPER_CONNECT=$$(hostname):2181 \
+		--env KAFKA_LISTENERS=INTERNAL://:9092,EXTERNAL://:9093 \
+		--env advertised.listeners=INTERNAL://kafka:9092,EXTERNAL://$$(hostname):9093 \
+		--publish 9093:9093 \
+		-v /home/lutz/kafka/logs:/tmp/kafka-logs \
+		-v /home/lutz/kafka/config:/opt/kafka/config \
+		-v kafka-vol:/kafka \
+		wurstmeister/kafka
+
+# Lief mit einfachem Zookeeker in einer Instanz
+kafka1:
+	docker run -d \
+		--name kafka \
 		--network kafka-net \
 		--network-alias kafka \
 		--env HOSTNAME_COMMAND="docker info 2>/dev/null | grep ^Name: | cut -d' ' -f 2" \
