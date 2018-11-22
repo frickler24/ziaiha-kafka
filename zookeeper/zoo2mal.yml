@@ -19,6 +19,7 @@ services:
               mode: host
         networks:
             - zoonet
+            - freenet
         deploy:
             restart_policy:
                 condition: on-failure
@@ -48,6 +49,7 @@ services:
               mode: host
         networks:
             - zoonet
+            - freenet
         deploy:
             restart_policy:
                 condition: on-failure
@@ -60,6 +62,7 @@ services:
             - z2-data:/data
             - z2-datalog:/datalog
 networks:
+    freenet:
     zoonet:
 
 volumes:

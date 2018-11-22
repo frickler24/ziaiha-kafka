@@ -25,3 +25,4 @@ Schreibtisch
 .xsession-errors.old
 **/*.swp
 .gnupg
+kafka/kafka_2.11-2.0.1.tgz

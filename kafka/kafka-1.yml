@@ -1,0 +1,32 @@
+version: '3.3'
+
+services:
+    server1:
+        image: kafka
+        hostname: kafka
+        ports:
+            - target: 9093
+              published: 9093
+              protocol: tcp
+              mode: host
+        networks:
+            - net
+        deploy:
+            restart_policy:
+                condition: on-failure
+        environment:
+            KAFKA_BROKER_ID: 101
+            KAFKA_ZOOKEEPER_CONNECT: 172.17.0.1:2181
+            KAFKA_LISTENERS: INTERNAL://172.17.0.1:9092,EXTERNAL://localhost:9093
+            advertised.listeners: INTERNAL://:9092,EXTERNAL://kafka1:9093
+        volumes:
+            - /home/pi/ziaiha-kafka/kafka/logs:/tmp/kafka-logs
+            - /home/pi/ziaiha-kafka/kafka/config:/opt/kafka/config
+            - k1-kafka-vol:/kafka
+
+networks:
+    net:
+
+volumes:
+    k1-kafka-vol:
+
